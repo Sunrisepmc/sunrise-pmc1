@@ -11,7 +11,7 @@
 - **Core Specialization:** Premium Construction Project Management Consultancy (PMC), Turnkey Projects & Specialized Quantity Surveying (QS) Billing Audits.
 - **Primary Market / Geo:** Surat, Gujarat, India (Local keywords: *PMC in Surat*, *Best PMC in Surat*, *PMC near me*, *Ugat Junction*, *Bhesan Road*).
 - **Managing Director:** Arjun Sharma (18+ Years Engineering Experience, ₹1,500+ Cr managed portfolio, 20+ landmark developments).
-- **Direct Phone:** `+91 95860 00933` | **Email:** `contact@sunrisepmc.in`
+- **Direct Phone:** `+91 95860 00933` | **Email:** `sunrisepmcas@gmail.com`
 - **Corporate Address:** GL-2, Anand Avenue Commercial Complex (Building G & H), First Floor, Bhesan Road, Ugat Junction, Surat - 395005, Gujarat, India.
 - **Coordinates:** `21.1983° N, 72.7844° E`
 - **Tech Stack:**

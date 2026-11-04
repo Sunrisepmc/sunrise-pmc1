@@ -19,6 +19,5 @@ Welcome, AI Agent! To conserve tokens, avoid whole-repo scans, and immediately u
    - Deployment: Deploy `dist/` directly to any web host (e.g. Apache `public_html`, Nginx, Vercel, Netlify, Cloudflare Pages).
 
 3. **Core Design Guidelines:**
-   - Keep the rich architectural aesthetic (60% `#0B0E14` base, 30% `#151B26` cards, 10% `#C9A84C` gold).
-   - Never use flat blinding white screens that trigger visitor bounce.
+   - Architectural White Luxury aesthetic (60% `#FFFFFF` / `#F8F9FA` base canvas with blueprint grid, 30% `#0F172A` charcoal text with elevated white cards, 10% `#B88E28` / `#C9A84C` gold accents with shimmer & glow hover animation).
    - Retain GSAP animations and Lenis smooth scrolling.
