@@ -593,13 +593,58 @@ function initProjects() {
     const loc = entry.getAttribute('data-location') || '';
     const img = resolveAssetUrl(entry.getAttribute('data-img') || '');
     const desc = (entry.querySelector('.entry-desc') || {}).textContent || '';
+    const galleryRaw = entry.getAttribute('data-gallery') || '';
+    const videoSrc   = entry.getAttribute('data-video')   || '';
+    const galleryImgs = galleryRaw
+      ? galleryRaw.split(',').map(s => resolveAssetUrl(s.trim())).filter(Boolean)
+      : (videoSrc ? [] : [img]);
+
+    // Build hero: video OR multi-image carousel OR single image
+    let heroHTML = '';
+    if (videoSrc) {
+      // ---- VIDEO HERO ----
+      const vsrc = resolveAssetUrl(videoSrc);
+      heroHTML = [
+        '<div style="height:340px;overflow:hidden;margin-bottom:28px;border-radius:4px;position:relative;background:#0F172A;">',
+        '<video id="mgc-video" src="' + vsrc + '" controls playsinline style="width:100%;height:100%;object-fit:cover;display:block;" preload="auto"></video>',
+        '<div style="position:absolute;top:12px;left:12px;font-size:0.65rem;letter-spacing:0.18em;color:#fff;font-weight:700;background:rgba(158,122,42,0.92);padding:5px 12px;border-radius:2px;box-shadow:0 2px 10px rgba(0,0,0,0.25);pointer-events:none;">' + type + '</div>',
+        '</div>'
+      ].join('');
+    } else if (galleryImgs.length > 1) {
+      const slides = galleryImgs.map((src, i) =>
+        '<div class="mgc-slide" style="min-width:100%;height:100%;flex-shrink:0;">' +
+        '<img src="' + src + '" alt="' + title + ' — photo ' + (i+1) + '" ' +
+        'style="width:100%;height:100%;object-fit:cover;">' +
+        '</div>'
+      ).join('');
+      const dots = galleryImgs.map((_, i) =>
+        '<button class="mgc-dot' + (i === 0 ? ' mgc-dot-active' : '') + '" data-idx="' + i + '" ' +
+        'aria-label="Photo ' + (i+1) + '" style="width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;' +
+        'background:' + (i === 0 ? '#B88E28' : 'rgba(255,255,255,0.5)') + ';padding:0;transition:background 0.25s;"></button>'
+      ).join('');
+      heroHTML = [
+        '<div id="mgc-wrap" style="height:340px;overflow:hidden;margin-bottom:28px;border-radius:4px;position:relative;background:var(--bg-stone);touch-action:pan-y;">',
+        '  <div id="mgc-track" style="display:flex;height:100%;transition:transform 0.42s cubic-bezier(0.25,0.46,0.45,0.94);">' + slides + '</div>',
+        '  <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,0.5));pointer-events:none;"></div>',
+        '  <div style="position:absolute;bottom:16px;left:16px;font-size:0.65rem;letter-spacing:0.18em;color:#fff;font-weight:700;background:rgba(158,122,42,0.92);padding:5px 12px;border-radius:2px;box-shadow:0 2px 10px rgba(0,0,0,0.25);">' + type + '</div>',
+        '  <div id="mgc-counter" style="position:absolute;bottom:16px;right:16px;font-size:0.68rem;letter-spacing:0.1em;color:rgba(255,255,255,0.85);font-weight:700;background:rgba(0,0,0,0.4);padding:4px 10px;border-radius:20px;">1 / ' + galleryImgs.length + '</div>',
+        '  <button id="mgc-prev" aria-label="Previous photo" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,0.7);background:rgba(0,0,0,0.35);color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:background 0.2s;">&#8592;</button>',
+        '  <button id="mgc-next" aria-label="Next photo" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:2px solid rgba(255,255,255,0.7);background:rgba(0,0,0,0.35);color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;transition:background 0.2s;">&#8594;</button>',
+        '  <div id="mgc-dots" style="position:absolute;bottom:46px;left:50%;transform:translateX(-50%);display:flex;gap:7px;align-items:center;">' + dots + '</div>',
+        '</div>'
+      ].join('');
+    } else {
+      heroHTML = [
+        '<div style="height:320px;overflow:hidden;margin-bottom:28px;border-radius:4px;position:relative;background:var(--bg-stone);">',
+        '<img src="' + img + '" alt="' + title + '" style="width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;" onmouseover="this.style.transform=\'scale(1.04)\'" onmouseout="this.style.transform=\'scale(1)\'">',
+        '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.45));pointer-events:none;"></div>',
+        '<div style="position:absolute;bottom:16px;left:16px;font-size:0.65rem;letter-spacing:0.18em;color:#fff;font-weight:700;background:rgba(158,122,42,0.92);padding:5px 12px;border-radius:2px;box-shadow:0 2px 10px rgba(0,0,0,0.25);">' + type + '</div>',
+        '</div>'
+      ].join('');
+    }
 
     slot.innerHTML = [
-      '<div style="height:320px;overflow:hidden;margin-bottom:28px;border-radius:4px;position:relative;background:var(--bg-stone);">',
-      '<img src="' + img + '" alt="' + title + '" style="width:100%;height:100%;object-fit:cover;transition:transform 0.6s ease;" onmouseover="this.style.transform=\'scale(1.04)\'" onmouseout="this.style.transform=\'scale(1)\'">',
-      '<div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.45));pointer-events:none;"></div>',
-      '<div style="position:absolute;bottom:16px;left:16px;font-size:0.65rem;letter-spacing:0.18em;color:#fff;font-weight:700;background:rgba(158,122,42,0.92);padding:5px 12px;border-radius:2px;box-shadow:0 2px 10px rgba(0,0,0,0.25);">' + type + '</div>',
-      '</div>',
+      heroHTML,
       '<div style="font-size:0.72rem;letter-spacing:0.18em;color:var(--accent-gold);font-weight:700;margin-bottom:8px;text-transform:uppercase;">' + loc + '</div>',
       '<h3 style="font-family:var(--font-serif-roman);font-size:2.2rem;color:var(--text-primary);margin-bottom:14px;line-height:1.15;">' + title + '</h3>',
       '<p style="font-size:1rem;color:var(--text-secondary);line-height:1.8;margin-bottom:28px;">' + desc + '</p>',
@@ -632,12 +677,64 @@ function initProjects() {
         { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: 'power3.out' }
       );
     }
+
+    // --- Modal Gallery Carousel init ---
+    if (galleryImgs.length > 1) {
+      const track   = document.getElementById('mgc-track');
+      const prevBtn = document.getElementById('mgc-prev');
+      const nextBtn = document.getElementById('mgc-next');
+      const counter = document.getElementById('mgc-counter');
+      const dotsEl  = document.getElementById('mgc-dots');
+      const wrap    = document.getElementById('mgc-wrap');
+      let cur = 0;
+      const total = galleryImgs.length;
+
+      function goTo(idx) {
+        cur = (idx + total) % total;
+        track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+        counter.textContent = (cur + 1) + ' / ' + total;
+        dotsEl.querySelectorAll('.mgc-dot').forEach((d, i) => {
+          d.style.background = i === cur ? '#B88E28' : 'rgba(255,255,255,0.5)';
+          d.classList.toggle('mgc-dot-active', i === cur);
+        });
+      }
+
+      prevBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(cur - 1); });
+      nextBtn.addEventListener('click', (e) => { e.stopPropagation(); goTo(cur + 1); });
+      dotsEl.querySelectorAll('.mgc-dot').forEach(d => {
+        d.addEventListener('click', (e) => { e.stopPropagation(); goTo(+d.dataset.idx); });
+      });
+
+      // Touch/swipe support
+      let touchStartX = 0;
+      wrap.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      wrap.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 40) goTo(dx < 0 ? cur + 1 : cur - 1);
+      }, { passive: true });
+
+      // Keyboard left/right when modal is open
+      wrap._keyHandler = (e) => {
+        if (e.key === 'ArrowLeft')  goTo(cur - 1);
+        if (e.key === 'ArrowRight') goTo(cur + 1);
+      };
+      document.addEventListener('keydown', wrap._keyHandler);
+    }
   }
 
   openProjectModal = openModal;
 
   function closeModal() {
     if (!modal) return;
+    // Pause video if playing in modal
+    const vid = document.getElementById('mgc-video');
+    if (vid) { vid.pause(); }
+    // Remove any carousel keyboard listener
+    const wrap = document.getElementById('mgc-wrap');
+    if (wrap && wrap._keyHandler) {
+      document.removeEventListener('keydown', wrap._keyHandler);
+      wrap._keyHandler = null;
+    }
     const finish = () => {
       modal.classList.remove('active');
       modal.setAttribute('aria-hidden', 'true');
