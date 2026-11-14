@@ -1,10 +1,81 @@
-# Ignore large video zip files
-videos/*.zip
-*.zip
+# ============================================================
+#  SunRise PMC — .gitignore
+#  Keep the repo clean: source only, no build output or junk
+# ============================================================
 
-# Ignore node_modules
+# ── Build output ────────────────────────────────────────────
+dist/
+.vite/
+
+# ── Dependencies ─────────────────────────────────────────────
 node_modules/
+package-lock.json
 
-# Ignore env files
+# ── Deployment zips (too large for git) ──────────────────────
+*.zip
+*.tar.gz
+*.rar
+
+# ── Environment & secrets ────────────────────────────────────
 .env
 .env.*
+.env.local
+.env.production
+
+# ── Python scratch / utility scripts ─────────────────────────
+*.py
+__pycache__/
+*.pyc
+*.pyo
+
+# ── Large raw media files (originals — keep only optimised) ──
+# Original WhatsApp uploads with spaces in filenames
+public/images/ARVIND*
+public/images/WhatsApp*
+public/images/raj-ele*
+# Raw video originals (keep the renamed web-ready ones)
+# If you want to track videos, remove the next line
+public/images/*.mp4
+
+# ── macOS system files ───────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# ── Windows system files ─────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ── Editor / IDE ─────────────────────────────────────────────
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+
+# ── Logs & temp ──────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tmp
+*.temp
+
+# ── Uploaded/downloaded temp images ──────────────────────────
+# (WhatsApp photos with spaces — not web-ready)
+"WhatsApp Image*"
+"WhatsApp Video*"
+
+# ── Miscellaneous junk ────────────────────────────────────────
+*.bak
+*.backup
+.cache/
+.parcel-cache/
