@@ -1,12 +1,11 @@
 {
   "name": "sunrise-pmc",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "prebuild": "npm install",
-    "build": "vite build",
+    "build": "npm install && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
